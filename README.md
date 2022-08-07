@@ -36,7 +36,8 @@ optional arguments:
   -g GAUSSIANBLUR, --gaussianblur GAUSSIANBLUR
                         Define gaussianBlur value
   -o OUTDIR, --outdir OUTDIR
-                        Directory to save clips/captures```
+                        Directory to save clips/captures
+```
 </br>
 Changing detection variables:</br>
 Gaussian Blur: g will decrease blur, G will increase blur</br>
