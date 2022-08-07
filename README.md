@@ -12,6 +12,8 @@ Edit the file it points you to, look for the line that starts with dislikes... a
 
 RUNNING:</br>
 ```
+$ python3 ./MoDe.py -s http://youtube.com/XYZABCUVW -q 1 -o /Users/UserName/Pictures/
+
 usage: MoDe.py [-h] [-c CODEC] [-q QUAD] [-s SOURCE] [-t THREADING]
                [-v VERBOSE] [-C CONTOURAREA] [-D DELTA] [-g GAUSSIANBLUR]
                [-o OUTDIR]
