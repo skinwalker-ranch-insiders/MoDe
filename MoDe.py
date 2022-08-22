@@ -36,7 +36,8 @@ import pafy
 import time
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-c", "--codec", type=str, default='x264', help="x264 mpv4 divx")
+#ap.add_argument("-h", "--help", help="This message")
+ap.add_argument("-c", "--codec", type=str, default='avc1', help="avc1 x264 mpv4 divx")
 ap.add_argument("-q", "--quad", type=int, default=None, help="Enable Quadrant Splitting")
 ap.add_argument("-s", "--source", help="http YouTube URL or File Path")
 ap.add_argument("-t", "--threading", type=int, default=None, help="Enable Threading")
@@ -45,6 +46,8 @@ ap.add_argument("-C", "--contourarea", type=int, default=201, help="Define conto
 ap.add_argument("-D", "--delta", type=int, default=25, help="Define Sensitivity Delta")
 ap.add_argument("-g", "--gaussianblur", type=int, default=11, help="Define gaussianBlur value")
 ap.add_argument("-o", "--outdir", type=str, default="./saved", help="Directory to save clips/captures")
+ap.add_argument("-m", "--mode", type=int, default=None, help="Enable Motion Detection")
+ap.add_argument("-d", "--debug", type=int, default=None, help="Show Debug Video Frames")
 args = vars(ap.parse_args())
 
 if args.get('verbose', None) is None:
@@ -59,6 +62,14 @@ if args.get('quad', None) is None:
     show_quadrants = False 
 else:
     show_quadrants = True 
+if args.get('mode', None) is None:
+    motion_detect = False
+else:
+    motion_detect = True
+if args.get('debug', None) is None:
+    debug_show = False
+else:
+    debug_show = True
 
 # Set codec variable from CLI Option/Defaults
 codec = args["codec"]
@@ -134,17 +145,23 @@ while True:
     threshold = cv2.threshold(delta, dnum, 255, cv2.THRESH_BINARY)[1]
     (contours, _) = cv2.findContours(threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    for contour in contours:
-        draw(frame, contour, cnum)
+    if motion_detect:
+        for contour in contours:
+            draw(frame, contour, cnum)
+            status=1
+    else:
+        show_status=0
         status=1
-    status_list.append(status)
     
+    status_list.append(status)
+
     if show_status == 1:
         osd.display_status(frame, gnum, cnum, dnum)
 
-    #cv2.imshow("gray_frame Frame", gray_frame)
-    #cv2.imshow("Delta Frame", delta)
-    #cv2.imshow("Threshold Frame", threshold)
+    if debug_show:
+        cv2.imshow("gray_frame Frame", gray_frame)
+        cv2.imshow("Delta Frame", delta)
+        cv2.imshow("Threshold Frame", threshold)
 
     if show_quadrants:
         cv2.imshow(v_title + " Q1",frame[0:frameHalfHeight, 0:frameHalfWidth])
@@ -164,6 +181,11 @@ while True:
             show_status = 1
         else:
             show_status = 0
+    if key == ord('m'): 
+        if status == 1 and motion_detect:
+            motion_detect = False
+        else:
+            motion_detect = True
     if key == ord('G'):
         if status == 1:
             gnum = (gnum + 2)
@@ -203,9 +225,9 @@ while True:
     if key == ord('r'):
         if status == 1:
             # Reset settings
-            gnum = 25
-            cnum = 10000 
-            dnum = 5
+            gnum = 21
+            cnum = 500 
+            dnum = 25
     if key == ord('s'):
         timestamp = datetime.datetime.now()
         img_name = "{}/{}.png".format(out_dir, 
@@ -217,6 +239,7 @@ while True:
             timestamp = datetime.datetime.now()
             p = "{}/{}.mp4".format(out_dir,
                 timestamp.strftime("%Y%m%d-%H%M%S"))
+            print("Recording...")
             kcw.start(p, cv2.VideoWriter_fourcc(*codec), 20, frameWidth, frameHeight)
     if updateConsecFrames:
         consecFrames += 1
