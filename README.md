@@ -1,15 +1,15 @@
 # detect_stream
- 
+</br> 
 PREREQUISITES:</br>
 This has been developed on MacOS and has not been properly tested on Windows or Linux. There have been reports of this working Windows 11, but I am not aware of the details involved.</br>
 <p>
 Use pip to install the following the libraries:</br>
 `pip install cv2-python pafy youtube-dl`</br>
- 
+</br> 
 An error will pop up pointing to <something>/site-packages/pafy/backend_youtube_dl.py and dislikes. </br>
- 
+</br> 
 Edit the file it points you to, look for the line that starts with dislikes... and comment it out (change to #dislikes...). Save the file and everything should load proper.</br>
- 
+</br>
 RUNNING:</br>
 ```
 $ python3 ./MoDe.py -s http://youtube.com/XYZABCUVW -q 1 -o /Users/UserName/Pictures/
@@ -47,7 +47,7 @@ Delta    : d will decrease delta, D will increase delta</br>
 contourArea  : c will decrease contourArea, C will increase contourArea</br>
              : < will decrease contourArea by 200, > will increase contourArea by 200 (Tutorials started it at 10000 but low numbers helped box small objects)</br>
 Hide Display : h will hide and unhide the detection variables</br>
- 
+</br>
 PLAYBACK CONTROLS:</br>
 Pause (p)</br>
 unpause (anykey)</br>
