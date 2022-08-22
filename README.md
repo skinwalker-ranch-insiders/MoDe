@@ -2,14 +2,14 @@
 </br> 
 PREREQUISITES:</br>
 This has been developed on MacOS and has not been properly tested on Windows or Linux. There have been reports of this working Windows 11, but I am not aware of the details involved.</br>
-<p>
+</br>
 Use pip to install the following the libraries:</br>
 `pip install cv2-python pafy youtube-dl`</br>
-</br> 
+ </br>
 An error will pop up pointing to <something>/site-packages/pafy/backend_youtube_dl.py and dislikes. </br>
-</br> 
-Edit the file it points you to, look for the line that starts with dislikes... and comment it out (change to #dislikes...). Save the file and everything should load proper.</br>
 </br>
+Edit the file it points you to, look for the line that starts with dislikes... and comment it out (change to #dislikes...). Save the file and everything should load proper.</br>
+
 RUNNING:</br>
 ```
 $ python3 ./MoDe.py -s http://youtube.com/XYZABCUVW -q 1 -o /Users/UserName/Pictures/
@@ -40,7 +40,6 @@ optional arguments:
   -o OUTDIR, --outdir OUTDIR
                         Directory to save clips/captures
 ```
-</br>
 Changing detection variables:</br>
 Gaussian Blur: g will decrease blur, G will increase blur</br>
 Delta    : d will decrease delta, D will increase delta</br>
