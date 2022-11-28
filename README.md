@@ -1,4 +1,4 @@
-# detect_stream
+# (Mo)tion (De)tection
 </br> 
 PREREQUISITES:</br>
 This has been developed on MacOS and has not been properly tested on Windows or Linux. There have been reports of this working Windows 11, but I am not aware of the details involved.</br>
