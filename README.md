@@ -4,9 +4,9 @@ PREREQUISITES:</br>
 This has been developed on MacOS and has not been properly tested on Windows or Linux. There have been reports of this working Windows 11, but I am not aware of the details involved.</br>
 </br>
 Use pip to install the following the libraries:
-```
+'''
 pip install cv2-python pafy youtube-dl
-```
+'''
 
 An error will pop up pointing to <something>/site-packages/pafy/backend_youtube_dl.py and dislikes. </br>
 </br>
