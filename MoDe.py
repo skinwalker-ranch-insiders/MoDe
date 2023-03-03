@@ -80,6 +80,7 @@ buffer_size = 684
 
 kcw = KeyClipWriter(bufSize = buffer_size)
 consecFrames = 0
+BaseconsecFrames = 0
 
 out_dir = args["outdir"]
 
@@ -126,6 +127,9 @@ while True:
         check, frame = video.read()
 
     if frame is None:
+        if kcw.recording:
+            kcw.finish()
+            time.sleep(5)
         print("Unable to get frame")
         quit()
 
@@ -136,10 +140,16 @@ while True:
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray_frame = cv2.GaussianBlur(gray_frame, (gnum, gnum), 0)
     updateConsecFrames = True
+    resetBaselineFrame = True
 
     if baseline_image is None:
         baseline_image = gray_frame
         continue
+    if resetBaselineFrame:
+        BaseconsecFrames += 1
+        if BaseconsecFrames == 1000:
+            baseline_image = gray_frame
+            BaseconsecFrames = 0
 
     delta = cv2.absdiff(baseline_image, gray_frame)
     threshold = cv2.threshold(delta, dnum, 255, cv2.THRESH_BINARY)[1]
@@ -164,11 +174,16 @@ while True:
         cv2.imshow("Threshold Frame", threshold)
 
     if show_quadrants:
+        cv2.namedWindow(v_title + " Q1", cv2.WINDOW_NORMAL)
         cv2.imshow(v_title + " Q1",frame[0:frameHalfHeight, 0:frameHalfWidth])
+        cv2.namedWindow(v_title + " Q2", cv2.WINDOW_NORMAL)
         cv2.imshow(v_title + " Q2",frame[0:frameHalfHeight, frameHalfWidth:frameWidth])
+        cv2.namedWindow(v_title + " Q3", cv2.WINDOW_NORMAL)
         cv2.imshow(v_title + " Q3",frame[frameHalfHeight:frameHeight, 0:frameHalfWidth])
+        cv2.namedWindow(v_title + " Q4", cv2.WINDOW_NORMAL)
         cv2.imshow(v_title + " Q4",frame[frameHalfHeight:frameHeight, frameHalfWidth:frameWidth])
     else:
+        cv2.namedWindow(v_title, cv2.WINDOW_NORMAL)
         cv2.imshow(v_title, frame)
 
     # Key input jive
@@ -224,10 +239,11 @@ while True:
                 dnum = (dnum - 1)
     if key == ord('r'):
         if status == 1:
+            baseline_image = gray_frame
             # Reset settings
-            gnum = 21
-            cnum = 500 
-            dnum = 25
+            #gnum = 21
+            #cnum = 500 
+            #dnum = 25
     if key == ord('s'):
         timestamp = datetime.datetime.now()
         img_name = "{}/{}.png".format(out_dir, 
@@ -247,8 +263,8 @@ while True:
     kcw.update(frame)
     # if we are recording and reached a threshold on consecutive
     # number of frames with no action, stop recording the clip
-    if kcw.recording and consecFrames == buffer_size:
-        kcw.finish()
+    #if kcw.recording and consecFrames == buffer_size:
+    #    kcw.finish()
     # Stop Recording by pressing 'x'
     if key == ord('x'):
         if kcw.recording:
@@ -262,6 +278,7 @@ while True:
 
 if kcw.recording:
     kcw.finish()
+    time.sleep(5)
 #Clean up, Free memory
 if use_threading:
     vs.stop()
